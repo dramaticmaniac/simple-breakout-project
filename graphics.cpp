@@ -4,6 +4,7 @@
 #include "ball.h"
 #include "level.h"
 #include "paddle.h"
+#include "colors.h"
 
 #include "raylib.h"
 
@@ -97,19 +98,19 @@ void derive_graphics_metrics()
     const float level_height = static_cast<float>(current_level.rows) * cell_size;
     shift_to_center = {
         (screen_size.x - level_width) * 0.5f,
-        (screen_size.y - level_height)
+        (screen_size.y - level_height) * 0.5f
     };
 }
 
 void draw_menu()
 {
-    ClearBackground(BLACK);
+    ClearBackground(GAME_BG);
 
     const Text game_title = {
         "Breakout",
         { 0.50f, 0.50f },
-        200.0f,
-        RED,
+        100.0f,
+        TITLE_COLOR,
         4.0f,
         &menu_font
     };
@@ -119,7 +120,7 @@ void draw_menu()
         "Press Enter to Start",
         { 0.50f, 0.65f },
         32.0f,
-        WHITE,
+        TEXT_COLOR,
         4.0f,
         &menu_font
     };
@@ -132,7 +133,7 @@ void draw_ui()
         "LEVEL " + std::to_string(current_level_index + 1) + " OUT OF " + std::to_string(level_count),
         { 0.5f, 0.0375f },
         48.0f,
-        WHITE,
+        TEXT_COLOR,
         4.0f,
         &menu_font
     };
@@ -142,7 +143,7 @@ void draw_ui()
         "BLOCKS " + std::to_string(current_level_blocks),
         { 0.5f, 0.9625f },
         48.0f,
-        WHITE,
+        TEXT_COLOR,
         4.0f,
         &menu_font
     };
@@ -151,7 +152,7 @@ void draw_ui()
 
 void draw_level()
 {
-    ClearBackground(BLACK);
+    ClearBackground(GAME_BG);
 
     for (size_t row = 0; row < current_level.rows; ++row) {
         for (size_t column = 0; column < current_level.columns; ++column) {
@@ -188,13 +189,13 @@ void draw_ball()
 
 void draw_pause_menu()
 {
-    ClearBackground(BLACK);
+    ClearBackground(GAME_BG);
 
     const Text paused_title = {
         "Press Escape to Resume",
         { 0.50f, 0.50f },
         32.0f,
-        WHITE,
+        TEXT_COLOR,
         4.0f,
         &menu_font
     };
@@ -242,7 +243,7 @@ void draw_victory_menu()
         "Victory!",
         { 0.50f, 0.50f },
         100.0f,
-        RED,
+        TITLE_COLOR,
         4.0f,
         &menu_font
     };
@@ -252,7 +253,7 @@ void draw_victory_menu()
         "Press Enter to Restart",
         { 0.50f, 0.65f },
         32.0f,
-        WHITE,
+        TEXT_COLOR,
         4.0f,
         &menu_font
     };

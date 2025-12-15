@@ -4,7 +4,7 @@
 #include "game.h"
 #include "graphics.h"
 #include "paddle.h"
-
+#include "colors.h"
 #include "raylib.h"
 
 char* current_level_data;
@@ -15,7 +15,7 @@ void load_level(const int offset)
 
     if (current_level_index >= level_count) {
         game_state = victory_state;
-        ClearBackground(BLACK);
+        ClearBackground(GAME_BG);
         init_victory_menu();
         current_level_index = 0;
 
