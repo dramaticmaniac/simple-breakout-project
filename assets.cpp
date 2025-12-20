@@ -33,13 +33,16 @@ void unload_textures()
 void load_sounds()
 {
     InitAudioDevice();
+    bg_music = LoadMusicStream( "data/sounds/bg.mp3");
+    SetMusicVolume(bg_music,0.5f);
     win_sound = LoadSound("data/sounds/win.wav");
     lose_sound = LoadSound("data/sounds/lose.wav");
+    hit_sound = LoadSound("data/sounds/hit.wav");
 }
 
 void unload_sounds()
 {
     UnloadSound(win_sound);
     UnloadSound(lose_sound);
-    CloseAudioDevice();
+    UnloadSound(hit_sound);
 }

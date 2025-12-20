@@ -1,5 +1,6 @@
 #include "assets.h"
 #include "ball.h"
+#include "colors.h"
 #include "game.h"
 #include "graphics.h"
 #include "level.h"
@@ -7,11 +8,14 @@
 
 #include "raylib.h"
 
+bool victory_sound_played = false;
+
 void update()
 {
     switch (game_state) {
     case menu_state:
         if (IsKeyPressed(KEY_ENTER)) {
+            PlaySound(hit_sound);
             load_level();
             game_state = in_game_state;
         }
@@ -37,8 +41,7 @@ void update()
         }
 
         if (current_level_blocks == 0) {
-            PlaySound(win_sound);
-            load_level(1); // now level.cpp handles victory_state automaticaly
+            load_level(1);
         }
         break;
 
@@ -60,16 +63,23 @@ void update()
         break;
 
     case victory_state:
+        if (!victory_sound_played) {
+            PlaySound(win_sound);
+            victory_sound_played = true;
+        }
         if (IsKeyPressed(KEY_ENTER)) {
             game_state = menu_state;
+            victory_sound_played = false;
         }
+        DrawText("YOU WIN!", 520, 240, 60, TITLE_COLOR);
+        DrawText("Press ENTER to Return to Menu", 410, 330, 24, TEXT_COLOR);
         break;
     }
 }
 
 void draw()
 {
-    ClearBackground(BLACK);
+    ClearBackground(GAME_BG);
 
     switch (game_state) {
     case menu_state:
@@ -89,19 +99,19 @@ void draw()
         draw_ball();
         draw_ui();
         DrawRectangle(0, 0, 1280, 720, Fade(BLACK, 0.6f));
-        DrawText("PAUSED", 540, 260, 50, RAYWHITE);
-        DrawText("Press ESC to Resume", 500, 330, 24, RAYWHITE);
+        DrawText("PAUSED", 540, 260, 50, TITLE_COLOR);
+        DrawText("Press ESC to Resume", 500, 330, 24, TEXT_COLOR);
         break;
 
     case game_over_state:
-        DrawText("GAME OVER", 500, 240, 60, RED);
-        DrawText("Press ENTER to Try Again", 460, 330, 24, RAYWHITE);
-        DrawText("Press BACKSPACE for Menu", 440, 370, 24, RAYWHITE);
+        DrawText("GAME OVER", 500, 240, 60, TITLE_COLOR);
+        DrawText("Press ENTER to Try Again", 460, 330, 24, TEXT_COLOR);
+        DrawText("Press BACKSPACE for Menu", 440, 370, 24, TEXT_COLOR);
         break;
 
     case victory_state:
-        DrawText("YOU WIN!", 520, 240, 60, RAYWHITE);
-        DrawText("Press ENTER to Return to Menu", 410, 330, 24, RAYWHITE);
+        DrawText("YOU WIN!", 520, 240, 60, TITLE_COLOR);
+        DrawText("Press ENTER to Return to Menu", 410, 330, 24, TEXT_COLOR);
         break;
     }
 }
@@ -110,14 +120,18 @@ int main()
 {
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(1280, 720, "Breakout");
+    SetExitKey(KEY_NULL);
     SetTargetFPS(60);
 
     load_fonts();
     load_textures();
     load_level();
     load_sounds();
-
+    SetMusicVolume(bg_music, 0.3f);
+    PlayMusicStream(bg_music);
     while (!WindowShouldClose()) {
+        UpdateMusicStream(bg_music);
+
         BeginDrawing();
 
         draw();

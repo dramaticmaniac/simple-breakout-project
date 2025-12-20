@@ -14,8 +14,10 @@ inline Texture2D block_texture;
 
 inline sprite ball_sprite;
 
+inline Music bg_music;
 inline Sound win_sound;
 inline Sound lose_sound;
+inline Sound hit_sound;
 
 void load_fonts();
 void unload_fonts();
