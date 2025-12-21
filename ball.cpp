@@ -31,8 +31,11 @@ void move_ball()
         ball_pos.x + ball_vel.x,
         ball_pos.y + ball_vel.y
     };
-
-    if (is_colliding_with_level_cell(next_ball_pos, ball_size, WALL)) {
+    if (is_colliding_with_level_cell(next_ball_pos, ball_size, LASER)) {
+        char& laser = get_colliding_level_cell(next_ball_pos, ball_size, LASER);
+        laser = VOID;
+        paddle_size.x = 5.0f;
+    } else if (is_colliding_with_level_cell(next_ball_pos, ball_size, WALL)) {
         if (is_colliding_with_level_cell({ next_ball_pos.x, ball_pos.y }, ball_size, WALL)) {
             ball_vel.x = -ball_vel.x;
             next_ball_pos.x = std::round(next_ball_pos.x);
@@ -55,6 +58,7 @@ void move_ball()
 
         temp = VOID;
         --current_level_blocks;
+
     } else if (is_colliding_with_paddle(next_ball_pos, ball_size)) {
         ball_vel.y = -std::abs(ball_vel.y);
     }

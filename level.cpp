@@ -1,10 +1,10 @@
 #include "level.h"
 
 #include "ball.h"
+#include "colors.h"
 #include "game.h"
 #include "graphics.h"
 #include "paddle.h"
-#include "colors.h"
 #include "raylib.h"
 
 char* current_level_data;
@@ -103,3 +103,9 @@ char& get_colliding_level_cell(const Vector2 pos, const Vector2 size, const char
 
     return get_level_cell(static_cast<size_t>(pos.x), static_cast<size_t>(pos.y));
 }
+Rectangle paddle_box = {
+    paddle_pos.x,
+    paddle_pos.y,
+    paddle_size.x,
+    paddle_size.y
+};

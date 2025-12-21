@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "raylib.h"
 #include <cstddef>
 
 constexpr char VOID = ' ';
@@ -9,6 +10,7 @@ constexpr char BLOCKS = '@';
 constexpr char PADDLE = 'P';
 constexpr char BOUNDARY = '!';
 constexpr char BALL = '*';
+constexpr char LASER = 'L';
 
 struct level {
     size_t rows = 0, columns = 0;
@@ -69,10 +71,10 @@ inline char level_3_data[] = {
     '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
     '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#',
     '#', ' ', '@', '@', '@', ' ', ' ', ' ', '@', '@', '@', ' ', '#',
-    '#', ' ', '@', ' ', '@', ' ', '#', ' ', '@', ' ', '@', ' ', '#',
+    '#', ' ', '@', 'L', '@', ' ', '#', ' ', '@', 'L', '@', ' ', '#',
     '#', ' ', '@', '@', '@', ' ', ' ', ' ', '@', '@', '@', ' ', '#',
     '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#',
-    '#', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', '#',
+    '#', ' ', ' ', '#', ' ', ' ', '*', ' ', ' ', '#', ' ', ' ', '#',
     '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#',
     '#', ' ', ' ', '@', ' ', ' ', ' ', ' ', ' ', '@', ' ', ' ', '#',
     '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#',
@@ -150,11 +152,10 @@ inline level level_6 = {
 
 inline constexpr size_t level_count = 1;
 inline level levels[level_count] = {
-    level_1,
-};//level_2, level_3, level_4, level_5, level_6
+    //level_1, level_2,
+    level_3
+    //, level_4, level_5, level_6
+};
 inline game_state game_state = menu_state;
-
-inline bool friendship_unlocked = false;
-inline bool friendship_mode = false;
 
 #endif // GAME_H

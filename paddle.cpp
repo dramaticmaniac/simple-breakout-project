@@ -5,6 +5,8 @@
 
 #include <cmath>
 
+extern float paddle_boost_timer;
+
 void spawn_paddle()
 {
     for (int column = 0; column < current_level.columns; column++) {
@@ -34,3 +36,7 @@ bool is_colliding_with_paddle(const Vector2 pos, const Vector2 size)
     const Rectangle hitbox = { pos.x, pos.y, size.x, size.y };
     return CheckCollisionRecs(paddle_hitbox, hitbox);
 }
+void update_paddle_boost(float dt)
+{
+        paddle_size = base_paddle_size;
+    }

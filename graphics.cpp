@@ -2,9 +2,9 @@
 
 #include "assets.h"
 #include "ball.h"
+#include "colors.h"
 #include "level.h"
 #include "paddle.h"
-#include "colors.h"
 
 #include "raylib.h"
 
@@ -166,6 +166,15 @@ void draw_level()
                 break;
             case BLOCKS:
                 draw_image(block_texture, texture_x_pos, texture_y_pos, cell_size);
+                break;
+            case LASER:
+                DrawRectangle(
+                    shift_to_center.x + column * cell_size,
+                    shift_to_center.y + row * cell_size,
+                    cell_size,
+                    cell_size,
+                    RED
+                );
                 break;
             default:;
             }
