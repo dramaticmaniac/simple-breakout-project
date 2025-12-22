@@ -11,6 +11,8 @@ char* current_level_data;
 
 void load_level(const int offset)
 {
+    paddle_size.x = 3.0f;
+
     current_level_index += offset;
 
     if (current_level_index >= level_count) {

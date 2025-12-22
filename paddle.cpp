@@ -5,10 +5,29 @@
 
 #include <cmath>
 
-extern float paddle_boost_timer;
+static void clamp_paddle_inside_level()
+{
+    while (is_colliding_with_level_cell(paddle_pos, paddle_size, WALL)) {
+        paddle_pos.x -= 1.0f;
+        if (paddle_pos.x < 0.0f)
+            break;
+    }
 
+    while (is_colliding_with_level_cell(paddle_pos, paddle_size, WALL)) {
+        paddle_pos.x += 1.0f;
+        if (paddle_pos.x > (float)current_level.columns)
+            break;
+    }
+
+    if (paddle_pos.x < 0.0f)
+        paddle_pos.x = 0.0f;
+    float max_x = (float)current_level.columns - paddle_size.x;
+    if (paddle_pos.x > max_x)
+        paddle_pos.x = max_x;
+}
 void spawn_paddle()
 {
+    paddle_size.x = paddle_base_w;
     for (int column = 0; column < current_level.columns; column++) {
         for (int row = 0; row < current_level.rows; row++) {
             if (get_level_cell(row, column) == PADDLE) {
@@ -28,6 +47,7 @@ void move_paddle(const float x_offset)
         next_paddle_pos_x = std::round(next_paddle_pos_x);
     }
     paddle_pos.x = next_paddle_pos_x;
+    clamp_paddle_inside_level();
 }
 
 bool is_colliding_with_paddle(const Vector2 pos, const Vector2 size)
@@ -36,7 +56,3 @@ bool is_colliding_with_paddle(const Vector2 pos, const Vector2 size)
     const Rectangle hitbox = { pos.x, pos.y, size.x, size.y };
     return CheckCollisionRecs(paddle_hitbox, hitbox);
 }
-void update_paddle_boost(float dt)
-{
-        paddle_size = base_paddle_size;
-    }

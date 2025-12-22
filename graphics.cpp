@@ -176,6 +176,13 @@ void draw_level()
                     RED
                 );
                 break;
+            case FISH:
+                draw_image(fish_texture, texture_x_pos, texture_y_pos, cell_size);
+                break;
+            case ICY:
+                draw_image(block_texture, texture_x_pos, texture_y_pos, cell_size);
+                DrawRectangle(texture_x_pos, texture_y_pos, cell_size, cell_size, Fade(SKYBLUE, 0.45f));
+                break;
             default:;
             }
         }

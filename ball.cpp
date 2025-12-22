@@ -35,6 +35,26 @@ void move_ball()
         char& laser = get_colliding_level_cell(next_ball_pos, ball_size, LASER);
         laser = VOID;
         paddle_size.x = 5.0f;
+    } else if (is_colliding_with_level_cell(next_ball_pos, ball_size, FISH)) {
+        char& fish = get_colliding_level_cell(next_ball_pos, ball_size, FISH);
+        fish = VOID;
+
+        ball_vel.x *= 0.7f;
+        ball_vel.y *= 0.7f;
+    } else if (is_colliding_with_level_cell(next_ball_pos, ball_size, ICY)) {
+        char& cell = get_colliding_level_cell(next_ball_pos, ball_size, ICY);
+
+        if (is_colliding_with_level_cell({ next_ball_pos.x, ball_pos.y }, ball_size, ICY)) {
+            ball_vel.x = -ball_vel.x;
+            next_ball_pos.x = std::round(next_ball_pos.x);
+        }
+        if (is_colliding_with_level_cell({ ball_pos.x, next_ball_pos.y }, ball_size, ICY)) {
+            ball_vel.y = -ball_vel.y;
+            next_ball_pos.y = std::round(next_ball_pos.y);
+        }
+
+        cell = BLOCKS;
+
     } else if (is_colliding_with_level_cell(next_ball_pos, ball_size, WALL)) {
         if (is_colliding_with_level_cell({ next_ball_pos.x, ball_pos.y }, ball_size, WALL)) {
             ball_vel.x = -ball_vel.x;

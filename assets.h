@@ -11,6 +11,7 @@ inline Texture2D wall_texture;
 inline Texture2D void_texture;
 inline Texture2D paddle_texture;
 inline Texture2D block_texture;
+inline Texture2D fish_texture;
 
 inline sprite ball_sprite;
 
