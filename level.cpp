@@ -36,6 +36,18 @@ void load_level(const int offset)
             }
         }
     }
+    fish_total = 0;
+    lasers_total = 0;
+
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < columns; ++col) {
+            char cell = current_level_data[row * columns + col];
+            if (cell == FISH)
+                fish_total++;
+            if (cell == LASER)
+                lasers_total++;
+        }
+    }
     current_level = { rows, columns, current_level_data };
 
     spawn_ball();

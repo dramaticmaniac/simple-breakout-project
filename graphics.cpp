@@ -12,6 +12,8 @@
 #include <iostream>
 #include <string>
 
+void init_victory_confetti();
+
 struct Text {
     std::string str;
     Vector2 position = { 0.50f, 0.50f };
@@ -20,6 +22,17 @@ struct Text {
     float spacing = 4.0f;
     Font* font = nullptr;
 };
+
+struct Confetti {
+    Vector2 pos;
+    float speed;
+    float radius;
+    Color color;
+};
+
+constexpr int CONFETTI_COUNT = 120;
+static Confetti victory_confetti[CONFETTI_COUNT];
+static bool confetti_initialized = false;
 
 constexpr float cell_scale = 0.6f;
 constexpr float screen_scale_divisor = 700.0f;
@@ -148,6 +161,31 @@ void draw_ui()
         &menu_font
     };
     draw_text(boxes_remaining);
+    const Text fish_text = {
+        "FISH: "
+            + std::to_string(fish_collected)
+            + " / "
+            + std::to_string(fish_total),
+        { 0.05f, 0.90f },
+        28.0f,
+        SKYBLUE,
+        2.0f,
+        &menu_font
+    };
+    draw_text(fish_text);
+
+    const Text laser_text = {
+        "LASERS: "
+            + std::to_string(lasers_collected)
+            + " / "
+            + std::to_string(lasers_total),
+        { 0.05f, 0.94f },
+        28.0f,
+        RED,
+        2.0f,
+        &menu_font
+    };
+    draw_text(laser_text);
 }
 
 void draw_level()
@@ -173,8 +211,7 @@ void draw_level()
                     shift_to_center.y + row * cell_size,
                     cell_size,
                     cell_size,
-                    RED
-                );
+                    RED);
                 break;
             case FISH:
                 draw_image(fish_texture, texture_x_pos, texture_y_pos, cell_size);
@@ -229,35 +266,30 @@ void init_victory_menu()
     }
 }
 
-void animate_victory_menu()
-{
-    for (size_t i = 0; i < victory_balls_count; ++i) {
-        if (victory_balls_pos[i].x + victory_balls_vel[i].x > screen_size.x || victory_balls_pos[i].x + victory_balls_vel[i].x < 0) {
-            victory_balls_vel[i].x *= -1.0f;
-        }
-        if (victory_balls_pos[i].y + victory_balls_vel[i].y > screen_size.y || victory_balls_pos[i].y + victory_balls_vel[i].y < 0) {
-            victory_balls_vel[i].y *= -1.0f;
-        }
-        victory_balls_pos[i] = {
-            victory_balls_pos[i].x + victory_balls_vel[i].x,
-            victory_balls_pos[i].y + victory_balls_vel[i].y
-        };
-    }
-}
-
 void draw_victory_menu()
 {
-    animate_victory_menu();
+    ClearBackground(GAME_BG);
 
-    DrawRectangleV({ 0.0f, 0.0f }, { screen_size.x, screen_size.y }, { 0, 0, 0, 50 });
+    if (!confetti_initialized) {
+        init_victory_confetti();
+    }
 
-    for (const auto& [x, y] : victory_balls_pos) {
-        DrawCircleV({ x, y }, victory_balls_size, WHITE);
+    float dt = GetFrameTime();
+
+    for (auto& c : victory_confetti) {
+        c.pos.y += c.speed * dt;
+
+        if (c.pos.y > screen_size.y) {
+            c.pos.y = 0;
+            c.pos.x = (float)GetRandomValue(0, (int)screen_size.x);
+        }
+
+        DrawCircleV(c.pos, c.radius, c.color);
     }
 
     const Text victory_title = {
         "Victory!",
-        { 0.50f, 0.50f },
+        { 0.50f, 0.45f },
         100.0f,
         TITLE_COLOR,
         4.0f,
@@ -267,11 +299,32 @@ void draw_victory_menu()
 
     const Text victory_subtitle = {
         "Press Enter to Restart",
-        { 0.50f, 0.65f },
+        { 0.50f, 0.62f },
         32.0f,
         TEXT_COLOR,
         4.0f,
         &menu_font
     };
     draw_text(victory_subtitle);
+}
+void init_victory_confetti()
+{
+    for (auto& c : victory_confetti) {
+        c.pos = {
+            (float)GetRandomValue(0, (int)screen_size.x),
+            (float)GetRandomValue(0, (int)screen_size.y)
+        };
+
+        c.speed = GetRandomValue(30, 80);
+        c.radius = GetRandomValue(2, 4);
+
+        c.color = Color {
+            (unsigned char)GetRandomValue(150, 255),
+            (unsigned char)GetRandomValue(150, 255),
+            (unsigned char)GetRandomValue(150, 255),
+            255
+        };
+    }
+
+    confetti_initialized = true;
 }

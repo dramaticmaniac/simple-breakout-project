@@ -66,14 +66,15 @@ void update()
         if (!victory_sound_played) {
             PlaySound(win_sound);
             victory_sound_played = true;
+            if (IsKeyPressed(KEY_ENTER)) {
+                game_state = menu_state;
+                victory_sound_played = false;
+            }
         }
         if (IsKeyPressed(KEY_ENTER)) {
             game_state = menu_state;
             victory_sound_played = false;
         }
-        DrawText("YOU WIN!", 520, 240, 60, TITLE_COLOR);
-        DrawText("Press ENTER to Return to Menu", 410, 330, 24, TEXT_COLOR);
-        break;
     }
 }
 
@@ -110,8 +111,7 @@ void draw()
         break;
 
     case victory_state:
-        DrawText("YOU WIN!", 520, 240, 60, TITLE_COLOR);
-        DrawText("Press ENTER to Return to Menu", 410, 330, 24, TEXT_COLOR);
+        draw_victory_menu();
         break;
     }
 }
